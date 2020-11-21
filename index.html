@@ -80,6 +80,16 @@
             outline: none;
         }
 
+        .clear {
+            background: #545454 !important;
+            cursor: pointer;
+            transition-duration: 0.2s;
+        }
+
+        .clear:hover {
+            background: #1a1a1a !important;
+        }
+
         .chip {
             background: #ff035b;
             border-radius: 20px;
@@ -104,9 +114,20 @@
 </html>
 
 <script>
-    let names = ['Paul', 'Ben', 'Nic', 'Jye']
+    let names = []
     const input = document.getElementById('names')
     const namesList = document.getElementById('names-list')
+
+    const setNames = () => {
+        console.log('SAVING NAMES TO LOCAL STORAGE')
+        window.localStorage.setItem('names', JSON.stringify(names))
+    }
+    
+    const Clear = () => {
+        names = []
+        namesList.innerHTML = ""
+        window.localStorage.clear();
+    }
 
     const Delete = (index) => {
         names.splice(index,1)
@@ -115,15 +136,23 @@
     }
 
     const createTags = () => {
-        namesList.innerHTML = ""
-        // Creates the name tiles
-        names.forEach((name, index) => {
-            console.log(name)
-            namesList.innerHTML += `<p class="chip">${name} <span onClick="Delete(${index})">x</span></p>`
-        });
+        if (names) {
+            namesList.innerHTML = ""
+            // Creates the name tiles
+            names.forEach((name, index) => {
+                console.log(name)
+                namesList.innerHTML += `<p class="chip">${name} <span onClick="Delete(${index})">x</span></p>`
+            });
+            // Adds the clear option for when there are lots of names
+            if (names.length > 3) {
+                namesList.innerHTML += `<p class="clear chip" onClick="Clear()">Clear <span onClick="Clear()">x</span></p>`
+            }
+            // Saves Names
+            setNames()
+        }  
     }
 
-    input.addEventListener("keyup", function(event) {
+    input.addEventListener("keyup", (event) => {
      // Use Enter to add items
         if (event.keyCode === 13) {
             Add()
@@ -134,7 +163,7 @@
         console.log('ADD PRESSED')
 
         if (input.value.length > 1) {
-            const inputValue = input.value.split(' ')
+            const inputValue = input.value.split(',')
             console.log(inputValue)
             names = names.concat(inputValue)
             input.value = ""
@@ -143,12 +172,19 @@
         }
     }
 
+    const shuffle = (array) => {
+        array.sort(() => Math.random() - 0.5);
+    }
+
     const SecretSanta = () => {
         console.log('HO HO HO')
     }
 
     const Loaded = () => {
         console.log('LOADED')
+        console.log(JSON.parse(window.localStorage.getItem('names')))
+        const loadedNames = JSON.parse(window.localStorage.getItem('names'))
+        if (loadedNames) { names = loadedNames}
         createTags()
     }
 
