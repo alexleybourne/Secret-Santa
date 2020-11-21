@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secret Santa</title>
 </head>
-<body>
+<body onLoad="Loaded()">
     <h1>Secret Santa</h1>
     <div>Enter everyone's names and we will magically match them</div>
-    <input id="names">Secret Santa</input>
-    <button onClick="Add()">Add</button>
+    <div><input id="names"></input><button onClick="Add()">Add</button></div>
     <div id="names-list"></div>
     <button onClick="SecretSanta()">Lets Go</button>
 </body>
@@ -39,23 +38,74 @@
             -moz-box-shadow: 1px 10px 31px 0px rgba(0,0,0,0.34);
             box-shadow: 1px 10px 31px 0px rgba(0,0,0,0.34);
         }
+
+        #names-list {
+            display: flex;
+        }
+
+        .chip {
+            background: #ff035b;
+            border-radius: 20px;
+            padding: 6px 10px;
+            text-align: center;
+            color: white;
+            margin: 10px 4px;
+        }
+
+        .chip span {
+            cursor: pointer;
+            opacity: 0.6;
+            transition-duration: 0.2s;
+        }
+
+        .chip span:hover {
+            opacity: 1;
+        }
+
     </style>
 
 </html>
 
 <script>
-    let names = []
+    let names = ['Paul', 'Ben', 'Nic', 'Jye']
     const input = document.getElementById('names')
+    const namesList = document.getElementById('names-list')
+
+    const Delete = (index) => {
+        names.pop(index)
+        console.log(`Deleting ${index}`)
+        createTags()
+    }
+
+    const createTags = () => {
+        namesList.innerHTML = ""
+        // Creates the name tiles
+        names.forEach((name, index) => {
+            console.log(name)
+            namesList.innerHTML += `<p class="chip">${name} <span onClick="Delete(${index})">x</span></p>`
+        });
+    }
 
     const Add = () => {
-        names.push(input.value)
-        input.value = ""
-        console.log(names)
+        console.log('ADD PRESSED')
+        if (input.value.length > 1) {
+            names.push(input.value)
+            input.value = ""
+            console.log(names)
+
+            // Creates the name tiles
+            const namesList = document.getElementById('names-list')
+            createTags()
+        }
     }
 
     const SecretSanta = () => {
-        names.forEach((name) => {
-            console.log(name)
-        });
+        console.log('HO HO HO')
     }
+
+    const Loaded = () => {
+        console.log('LOADED')
+        createTags()
+    }
+
 </script>
