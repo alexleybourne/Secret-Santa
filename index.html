@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Santa</title>
+</head>
+<body>
+    <h1>Secret Santa</h1>
+    <div>Enter everyone's names and we will magically match them</div>
+    <input id="names">Secret Santa</input>
+    <button onClick="Add()">Add</button>
+    <div id="names-list"></div>
+    <button onClick="SecretSanta()">Lets Go</button>
+</body>
+
+    <style>
+
+        html {
+            background-color: lightcoral;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: white;
+            width: 80vw;
+            height: 80vh;
+            border-radius: 20px;
+        }
+    </style>
+
+</html>
+
+<script>
+    let names = []
+    const input = document.getElementById('names')
+
+    const Add = () => {
+        names.push(input.value)
+        input.value = ""
+        console.log(names)
+    }
+
+    const SecretSanta = () => {
+        names.forEach((name) => {
+            console.log(name)
+        });
+    }
+</script>
