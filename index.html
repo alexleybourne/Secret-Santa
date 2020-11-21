@@ -88,13 +88,13 @@
 
     const Add = () => {
         console.log('ADD PRESSED')
+
         if (input.value.length > 1) {
-            names.push(input.value)
+            const inputValue = input.value.split(' ')
+            console.log(inputValue)
+            names = names.concat(inputValue)
             input.value = ""
             console.log(names)
-
-            // Creates the name tiles
-            const namesList = document.getElementById('names-list')
             createTags()
         }
     }
