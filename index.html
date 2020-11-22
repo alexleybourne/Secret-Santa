@@ -243,7 +243,7 @@
         console.log('ADD PRESSED')
 
         if (input.value.length > 1) {
-            const inputValue = input.value.split(',')
+            const inputValue = input.value.split(',').map(s => s.replace(/(^\s|\s$)/g, ''))
             console.log(inputValue)
             names = names.concat(inputValue)
             input.value = ""
@@ -259,46 +259,42 @@
     }
 
     function secretSantaMatches(givers, receivers) {
+        // Pick a random person to give a present
         const giver = givers[getRandomInt(givers.length)]
+
+        // Remove the selected giver from the list of givers
         const remainingGivers = givers.filter(g => g !== giver)
+
+        // Randomize the list of people to receive  gift
         const randomReceivers = [...receivers].sort(function() { return 0.5 - Math.random() })
 
-        console.log('Down Level')
+        // Loop through each person to receive a gift
+        for(let receiver of receivers) {
+            // Skip to check the next person if the giver an receiver are the same person
+            if(receiver === giver) continue
 
-        for(let possibleReceiver of receivers) {
-            if(possibleReceiver !== giver) {
-                const receiver = possibleReceiver
-                console.log('receiver', receiver)
-                console.log('giver', giver)
+            // Remove the selected person from the list of people to receive gifts
+            const remainingReceivers = receivers.filter(r => r !== receiver)
 
-                const remainingReceivers = receivers.filter(r => r !== receiver)
-                const newMatch = remainingGivers.length === 0 ? {} : secretSantaMatches(remainingGivers, remainingReceivers)
-                console.log('Up Level')
 
-                if(newMatch) {
-                    return {
-                        [giver]: receiver,
-                        ...newMatch
-                    }
+            const newMatch = remainingGivers.length === 0 ? {} : secretSantaMatches(remainingGivers, remainingReceivers)
+
+            if(newMatch) {
+                return {
+                    [giver]: receiver,
+                    ...newMatch
                 }
             }
         }
     }
 
     const SecretSanta = () => {
-        console.log(secretSantaMatches(names, names))
-        console.log('Secret Santa Time')
-        const names2 = [...names].sort(function() { return 0.5 - Math.random() });
-        console.log(names)
-        console.log(names2)
+        const matchNames = secretSantaMatches(names, names)
+        console.log(matchNames)
         matches.innerHTML = ""
-        names.forEach((name, index) => {
-            if (name !== names2[index]) {
-                matches.innerHTML += `<div class="match"><p> ${name} </p> <p> ==> </p> <p> ${names2[index]} </p><div>`
-            } else {
-                matches.innerHTML += `<div class="match"><p> ${name} </p> <p> ==> </p> <p> ${names2[index + 1]} </p><div>`
-            }
-        });
+        for (let [name, match] of Object.entries(matchNames)) {
+            matches.innerHTML += `<div class="match"><p> ${name} </p> <p> ==> </p> <p> ${match} </p><div>`
+        }
     }
 
     const Loaded = () => {
