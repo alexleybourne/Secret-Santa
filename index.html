@@ -34,6 +34,8 @@
     <div class="input"><input id="names"></input><button onClick="Add()">Add</button></div>
     <div id="names-list"></div>
     <button id="lets-go" onClick="SecretSanta()">Lets Go</button>
+    <div id="matches"></div>
+    <a href="https://twitter.com/alexleybourne" target="_blank" class="bottom-text">Created by Alex Leybourne 2020</a>
 </body>
 
     <style>
@@ -149,10 +151,33 @@
             cursor: pointer;
             opacity: 0.6;
             transition-duration: 0.2s;
+            text-transform: none;
         }
 
         .chip span:hover {
             opacity: 1;
+        }
+
+        .bottom-text {
+            opacity: 0.4;
+            color: black;
+            position: absolute;
+            bottom: 6vh;
+            font-size: 14px;
+            text-decoration: none;
+            transition-duration: 0.2s;
+        }
+
+        .bottom-text:hover {
+            opacity: 1;
+        }
+
+        .match {
+            display: flex;
+        }
+
+        .match p {
+            margin: 4px;
         }
 
     </style>
@@ -163,6 +188,7 @@
     let names = []
     const input = document.getElementById('names')
     const namesList = document.getElementById('names-list')
+    const matches = document.getElementById('matches')
 
     const setNames = () => {
         console.log('SAVING NAMES TO LOCAL STORAGE')
@@ -228,12 +254,51 @@
         console.log(names.length)
     }
 
-    const shuffle = (array) => {
-        array.sort(() => Math.random() - 0.5);
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+
+    function secretSantaMatches(givers, receivers) {
+        const giver = givers[getRandomInt(givers.length)]
+        const remainingGivers = givers.filter(g => g !== giver)
+        const randomReceivers = [...receivers].sort(function() { return 0.5 - Math.random() })
+
+        console.log('Down Level')
+
+        for(let possibleReceiver of receivers) {
+            if(possibleReceiver !== giver) {
+                const receiver = possibleReceiver
+                console.log('receiver', receiver)
+                console.log('giver', giver)
+
+                const remainingReceivers = receivers.filter(r => r !== receiver)
+                const newMatch = remainingGivers.length === 0 ? {} : secretSantaMatches(remainingGivers, remainingReceivers)
+                console.log('Up Level')
+
+                if(newMatch) {
+                    return {
+                        [giver]: receiver,
+                        ...newMatch
+                    }
+                }
+            }
+        }
     }
 
     const SecretSanta = () => {
-        console.log('HO HO HO')
+        console.log(secretSantaMatches(names, names))
+        console.log('Secret Santa Time')
+        const names2 = [...names].sort(function() { return 0.5 - Math.random() });
+        console.log(names)
+        console.log(names2)
+        matches.innerHTML = ""
+        names.forEach((name, index) => {
+            if (name !== names2[index]) {
+                matches.innerHTML += `<div class="match"><p> ${name} </p> <p> ==> </p> <p> ${names2[index]} </p><div>`
+            } else {
+                matches.innerHTML += `<div class="match"><p> ${name} </p> <p> ==> </p> <p> ${names2[index + 1]} </p><div>`
+            }
+        });
     }
 
     const Loaded = () => {
