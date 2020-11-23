@@ -190,6 +190,25 @@
             margin: 4px;
         }
 
+        .copy {
+            background: #545454;
+            border-radius: 20px;
+            cursor: pointer;
+            transition-duration: 0.2s;
+        }
+
+        .copy:hover {
+            background: #1a1a1a ;
+        }
+
+        .copy:active {
+            transform: scale(0.9)
+        }
+
+        .copy svg {
+            height: 20px;
+        }
+
     </style>
 
 </html>
@@ -313,7 +332,13 @@
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M14.5 7.5L0.5 14L3.5 7.5L0.5 0.5L14.5 7.5Z" fill="#FF035B" stroke="#FF035B" stroke-linejoin="round"/>
                 </svg>
-                <p class="chip" > ${match} </p><div>`
+                <p class="chip" > ${match} </p>
+                <p class="copy" title="Copy Message to Clipboard"> 
+                    <svg width="35" height="48" viewBox="0 0 35 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 3.42928L32 17.5129M12.5 2H7C4.23858 2 2 4.23858 2 7V41C2 43.7614 4.23858 46 7 46H28C30.7614 46 33 43.7614 33 41V20.5186C33 16.9458 29.3612 14.526 26.0664 15.9077L24.4336 16.5923C21.1388 17.974 17.5 15.5542 17.5 11.9814V7C17.5 4.23858 15.2614 2 12.5 2Z" stroke="white" stroke-width="4"/>
+                    </svg>
+                </p>
+                <div>`
         }
     }
 
